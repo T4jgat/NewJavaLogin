@@ -13,6 +13,10 @@ import static java.lang.Integer.parseInt;
 
 public class User implements Person {
 
+    public int getId_num() {
+        return id_num;
+    }
+
     // User's fields
     private int id_num;
     private String name;
@@ -52,7 +56,7 @@ public class User implements Person {
         Statement statement;
         ResultSet rs = null;
         try {
-            String sql = String.format("select * from users where email = '%s'", email);
+            String sql = String.format("select * from users where email = '%s and isadmin = false'", email);
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
             while (rs.next()) {
@@ -75,13 +79,41 @@ public class User implements Person {
     // Overrided login by email for User
     // (UNFINISHED)
     @Override
-    public String loginByEmail(String loginType) {
-        return null;
+    public boolean loginByEmail(String loginType) {
+        Scanner sc = new Scanner(System.in);
+        String passIn;
+
+        for (int i = 3; i > 0; i--) {
+            System.out.print("Password: ");
+            passIn = doHashing(sc.nextLine());
+
+            if ((this.password.equals(passIn) && this.email.equals(loginType))){
+                System.out.println("Success login!");
+                return true;
+            }
+            else {
+                System.out.println("Invalid Email/ID or Password");
+                System.out.println("You have " + (i-1) + " try(-ies)");
+            }
+
+            if (i == 1) {
+                System.out.print("Forget password? [Y/N]:");
+                String confirmation = sc.nextLine().toUpperCase();
+                if (confirmation.equals("Y")) {
+                    Password.resetPassword(this.password, this.email);
+                    return false;
+                }
+                if (confirmation.equals("N")) {
+                    registration();
+                }
+            }
+        }
+        return false;
     }
 
     // Overrided login by ID for User
     @Override
-    public void loginByID(int loginType) {
+    public boolean loginByID(int loginType) {
         Scanner sc = new Scanner(System.in);
         String passIn;
 
@@ -89,12 +121,10 @@ public class User implements Person {
         for (int i = 3; i > 0; i--) {
             System.out.print("Password: ");
             passIn = doHashing(sc.nextLine());
-            System.out.println(passIn);
-            System.out.println(this.id_num);
 
             if (this.password.equals(passIn) && this.id_num == loginType) {
                 System.out.println("Success login!");
-                break;
+                return true;
             } else {
                 System.out.println("Invalid Email/ID or Password");
                 System.out.println("You have " + (i - 1) + " try(-ies)");
@@ -106,13 +136,14 @@ public class User implements Person {
                 String confirmation = sc.nextLine().toUpperCase();
                 if (confirmation.equals("Y")) {
                     Password.resetPassword(this.password, this.email);
-                    break;
+                    return false;
                 }
                 if (confirmation.equals("N")) {
                     registration();
                 }
             }
         }
+        return false;
     }
 
     // Registration for User
@@ -145,13 +176,24 @@ public class User implements Person {
         }
         // Adding a user to the database
         db.insert_row(conn, "Users", name, email, doHashing(password), parseInt(id_num), isAdmin);
+        System.out.println(name + " is registered!");
     }
 
     // Override method for deleting own account
     // (UNFINISHED)
     @Override
     public void deleteUser(int id) {
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Now you can only delete your Account");
+        System.out.println("Do you want to do it? [Y/N]: ");
+        String option = sc.nextLine();
+        if (option.equals("Y")){
+            DbFunctions db = new DbFunctions();
+            Connection conn = db.connect_to_db("Users", "postgres", "1423");
+            db.delete_row_by_id(conn, "users", this.id_num);
+        } else if (option.equals("N")) {
+            System.out.println("Bye!");
+        }
     }
 
     // Name getter (May ever need)

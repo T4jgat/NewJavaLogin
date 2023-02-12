@@ -43,7 +43,6 @@ public class DbFunctions {
             String query = String.format("insert into %s(id_num,name,email,password,isAdmin) values('%s','%s','%s','%s', %s);", table_name, id, name, email, password, isAdmin);
             statement = conn.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Row Inserted");
         } catch (Exception e) {
             System.out.println(e);
         }
