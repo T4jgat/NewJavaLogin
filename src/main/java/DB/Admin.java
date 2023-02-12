@@ -75,7 +75,7 @@ public class Admin implements Person {
                 System.out.print("Forget password? [Y/N]:");
                 String confirmation = sc.nextLine().toUpperCase();
                 if (confirmation.equals("Y")) {
-                    Password.resetPassword(this.password);
+                    Password.resetPassword(this.password, this.email);
                     break;
                 }
             }

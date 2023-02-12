@@ -75,11 +75,11 @@ public class Password {
         return "";
     }
 
-    public static boolean emailVerification() {
+    public static boolean emailVerification(String email) {
         Scanner sc = new Scanner(System.in);
         String confirmationCode = codeGenerator();
         String codeFromPrompt;
-        SendMail mail = new SendMail("Confirmation code: " + confirmationCode);
+        SendMail mail = new SendMail(("Confirmation code: " + confirmationCode), email);
 
         do {
             System.out.print("Code: ");
@@ -88,10 +88,10 @@ public class Password {
         return true;
     }
 
-    public static void resetPassword(String password) {
+    public static void resetPassword(String password, String email) {
         DbFunctions db = new DbFunctions();
         Connection conn = db.connect_to_db("Users", "postgres", "1423");
-        if (emailVerification()) {
+        if (emailVerification(email)) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Password must have:");
             System.out.println("- At least 6 symbols");
@@ -106,7 +106,7 @@ public class Password {
                 new_pass = sc.nextLine();
                 validation = PasswordValidation(new_pass);
             }
-            db.update_password(conn, "Users", password, doHashing(new_pass));
+            db.update_password(conn, "Users", password, email, doHashing(new_pass));
 
             try {
                 conn.close();

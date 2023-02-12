@@ -13,10 +13,10 @@ import javax.mail.Transport;
 
 public class SendMail {
     private static final String from = "tmtmtm1423@gmail.com";
-    private static final String to = "220406@astanait.edu.kz";
+//    private static final String to = "220406@astanait.edu.kz";
     private static final String password = "ljyzgxawsllozjsp";
 
-    public SendMail(String code) {
+    public SendMail(String code, String email) {
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -34,7 +34,7 @@ public class SendMail {
 
             msg.setFrom(new InternetAddress(from));
 
-            InternetAddress[] address = {new InternetAddress(to)};
+            InternetAddress[] address = {new InternetAddress(email)};
             msg.setRecipients(Message.RecipientType.TO, address);
 
             msg.setSubject("Email code check");

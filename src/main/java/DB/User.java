@@ -19,6 +19,10 @@ public class User implements Person {
     private String email;
     private String password;
 
+    public String getPassword() {
+        return password;
+    }
+
     // User's constructor for loginByID
     public User(Connection conn, int id_num) {
         Statement statement;
@@ -85,8 +89,10 @@ public class User implements Person {
         for (int i = 3; i > 0; i--) {
             System.out.print("Password: ");
             passIn = doHashing(sc.nextLine());
+            System.out.println(passIn);
+            System.out.println(this.id_num);
 
-            if ((this.password.equals(passIn) && this.id_num == loginType)) {
+            if (this.password.equals(passIn) && this.id_num == loginType) {
                 System.out.println("Success login!");
                 break;
             } else {
@@ -99,7 +105,7 @@ public class User implements Person {
                 System.out.print("Forget password? [Y/N]:");
                 String confirmation = sc.nextLine().toUpperCase();
                 if (confirmation.equals("Y")) {
-                    Password.resetPassword(this.password);
+                    Password.resetPassword(this.password, this.email);
                     break;
                 }
                 if (confirmation.equals("N")) {
@@ -116,7 +122,7 @@ public class User implements Person {
         DbFunctions db = new DbFunctions();
         Connection conn = db.connect_to_db("Users", "postgres", "1423");
         // Global variables
-        Boolean isAdmin = true;
+        Boolean isAdmin = false;
         String name, email, password, id_num;
         Scanner scan = new Scanner(System.in);
 

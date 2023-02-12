@@ -67,10 +67,10 @@ public class DbFunctions {
         }
     }
 
-    public void update_password(Connection conn, String table_name, String old_pass, String new_pass) {
+    public void update_password(Connection conn, String table_name, String old_pass, String email, String new_pass) {
         Statement statement;
         try {
-            String query = String.format("update %s set password='%s' where password='%s'", table_name, new_pass, old_pass);
+            String query = String.format("update %s set password='%s' where email = '%s' and password='%s'", table_name, new_pass, email, old_pass);
             statement = conn.createStatement();
             statement.executeUpdate(query);
             System.out.println("Password was Updated!");
