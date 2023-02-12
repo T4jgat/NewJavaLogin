@@ -3,6 +3,7 @@ package Logining;
 import DB.DbFunctions;
 import DB.User;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.postgresql.jdbc.PgConnection;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -87,7 +88,9 @@ public class Password {
         return true;
     }
 
-    public static void resetPassword(DbFunctions db, Connection conn, String password) {
+    public static void resetPassword(String password) {
+        DbFunctions db = new DbFunctions();
+        Connection conn = db.connect_to_db("Users", "postgres", "1423");
         if (emailVerification()) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Password must have:");

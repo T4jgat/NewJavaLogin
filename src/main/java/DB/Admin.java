@@ -1,12 +1,45 @@
 package DB;
 
+import Logining.Password;
+
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
+import java.util.SplittableRandom;
+
+import static Logining.Password.doHashing;
 
 
 public class Admin implements Person {
 
+    private int id_num;
+    private String name;
+    private String email;
+    private String password;
+
+
+    public Admin(Connection conn, int id_num) {
+        Statement statement;
+        ResultSet rs = null;
+        try {
+            String sql = String.format("select * from users where id_num = %s and isadmin = true", id_num);
+            statement = conn.createStatement();
+            rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                this.id_num = rs.getInt("id_num");
+                this.name = rs.getString("name");
+                this.email = rs.getString("email");
+                this.password = rs.getString("password");
+            }
+            rs.close();
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String loginByEmail(String loginType) {
@@ -22,10 +55,36 @@ public class Admin implements Person {
 
     @Override
     public void loginByID(int loginType) {
+        Scanner sc = new Scanner(System.in);
+        String passIn;
+
+        for (int i = 3; i > 0; i--) {
+            System.out.print("Password: ");
+            passIn = doHashing(sc.nextLine());
+
+            if ((this.password.equals(passIn) && this.id_num == loginType)){
+                System.out.println("Success login!");
+                break;
+            }
+            else {
+                System.out.println("Invalid Email/ID or Password");
+                System.out.println("You have " + (i-1) + " try(-ies)");
+            }
+
+            if (i == 1) {
+                System.out.print("Forget password? [Y/N]:");
+                String confirmation = sc.nextLine().toUpperCase();
+                if (confirmation.equals("Y")) {
+                    Password.resetPassword(this.password);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
     public void registration() {
+
     }
 
     @Override
