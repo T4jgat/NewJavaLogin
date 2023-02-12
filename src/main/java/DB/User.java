@@ -15,13 +15,6 @@ public class User implements Person {
     private String email;
     private String password;
 
-    public User(int id_num, String name, String email, String password){
-        this.id_num = id_num;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
     public User(Connection conn, int id_num) {
         Statement statement;
         ResultSet rs = null;
