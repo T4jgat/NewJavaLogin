@@ -12,9 +12,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.Transport;
 
 public class SendMail {
-    private static final String from = "";
-//    private static final String to = "220406@astanait.edu.kz";
-    private static final String password = "";
+    private static final String from = "tmtmtm1423@gmail.com";
+    private static final String password = "gcqfaywnuxuzflca";
 
     public SendMail(String code, String email) {
         Properties props = new Properties();

@@ -8,7 +8,9 @@ import DB.User;
 
 // External libs
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -41,37 +43,45 @@ public class MainMenu {
 
         // Login option for the Admin
         if (option.equals(ADMIN_OPTION)) {
-            System.out.println("Welcome, Admin!");
-            System.out.print("Email or IIN: ");
-            loginType = sc.nextLine();
-            if (isNumeric(loginType)) { // If Admin entered his IIN
-                int idLogin = Integer.parseInt(loginType);
-                Admin AdminById = new Admin(conn, idLogin);
-                if (AdminById.loginByID(idLogin)) {
-                    AdminById.AdminOptions();
+            try {
+                System.out.println("Welcome, Admin!");
+                System.out.print("Email or IIN: ");
+                loginType = sc.nextLine();
+                if (isNumeric(loginType)) { // If Admin entered his IIN
+                    int idLogin = Integer.parseInt(loginType);
+                    Admin AdminById = new Admin(conn, idLogin);
+                    if (AdminById.loginByID(idLogin)) {
+                        AdminById.AdminOptions();
+                    }
+                } else {
+                    Admin AdminByEmail = new Admin(conn, loginType);
+                    if (AdminByEmail.loginByEmail(loginType)) {
+                        AdminByEmail.AdminOptions();
+                    }
                 }
-            } else {
-                Admin AdminByEmail = new Admin(conn, loginType);
-                if (AdminByEmail.loginByEmail(loginType)) {
-                    AdminByEmail.AdminOptions();
-                }
+            } catch (NullPointerException e) {
+                System.out.println("No such Admin account");
             }
         }
         // Login option for the User
         else if (option.equals(USER_OPTION)) {
-            System.out.println("Welcome, User!");
-            System.out.print("Email or IIN: ");
-            loginType = sc.nextLine();
-            if (isNumeric(loginType)) { // if User entered his IIN
-                int IdLogin = Integer.parseInt(loginType);  // data type substitution for loginType
-                User UserById = new User(conn, IdLogin);    // creation User instance by ID
-                UserById.loginByID(IdLogin);                // Main login method
-            } else {
-                String emailLogin = loginType; // if User entered his Email
-                User UserByEmail = new User(conn, emailLogin);  // Creating User instance by Email
-                if (UserByEmail.loginByEmail(emailLogin)){
-                    UserByEmail.deleteUser(UserByEmail.getId_num());
-                }           // Main login method
+            try {
+                System.out.println("Welcome, User!");
+                System.out.print("Email or IIN: ");
+                loginType = sc.nextLine();
+                if (isNumeric(loginType)) { // if User entered his IIN
+                    int IdLogin = Integer.parseInt(loginType); // data type substitution for loginType
+                    User UserById = new User(conn, IdLogin);    // creation User instance by ID
+                    UserById.loginByID(IdLogin);                // Main login method
+                } else {
+                    String emailLogin = loginType; // if User entered his Email
+                    User UserByEmail = new User(conn, emailLogin);  // Creating User instance by Email
+                    if (UserByEmail.loginByEmail(emailLogin)) {
+                        UserByEmail.deleteUser(UserByEmail.getId_num());
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("No such User account");
             }
         }
 

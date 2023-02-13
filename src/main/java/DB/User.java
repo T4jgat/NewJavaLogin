@@ -77,7 +77,6 @@ public class User implements Person {
 
 
     // Overrided login by email for User
-    // (UNFINISHED)
     @Override
     public boolean loginByEmail(String loginType) {
         Scanner sc = new Scanner(System.in);

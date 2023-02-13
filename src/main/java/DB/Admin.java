@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.SplittableRandom;
 
@@ -43,7 +44,7 @@ public class Admin implements Person {
         }
     }
 
-    public Admin(Connection conn, String email){
+    public Admin(Connection conn, String email) {
         Statement statement;
         ResultSet rs = null;
         try {
@@ -73,13 +74,12 @@ public class Admin implements Person {
             System.out.print("Password: ");
             passIn = doHashing(sc.nextLine());
 
-            if ((this.password.equals(passIn) && this.email.equals(loginType))){
+            if ((this.password.equals(passIn) && this.email.equals(loginType))) {
                 System.out.println("Success login!");
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("Invalid Email/ID or Password");
-                System.out.println("You have " + (i-1) + " try(-ies)");
+                System.out.println("You have " + (i - 1) + " try(-ies)");
             }
 
             if (i == 1) {
@@ -106,13 +106,12 @@ public class Admin implements Person {
             System.out.print("Password: ");
             passIn = doHashing(sc.nextLine());
 
-            if ((this.password.equals(passIn) && this.id_num == loginType)){
+            if ((this.password.equals(passIn) && this.id_num == loginType)) {
                 System.out.println("Success login!");
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("Invalid Email/ID or Password");
-                System.out.println("You have " + (i-1) + " try(-ies)");
+                System.out.println("You have " + (i - 1) + " try(-ies)");
             }
 
             if (i == 1) {
@@ -121,8 +120,7 @@ public class Admin implements Person {
                 if (confirmation.equals("Y")) {
                     Password.resetPassword(this.password, this.email);
                     return true;
-                }
-                else if (confirmation.equals("N")) {
+                } else if (confirmation.equals("N")) {
                     System.out.println("INVALID ADMIN");
                     return false;
                 }
@@ -174,18 +172,20 @@ public class Admin implements Person {
     public void AdminOptions() {
         String option = null;
         Scanner sc = new Scanner(System.in);
-        System.out.println("As admin you can register and delete users");
-        System.out.println("[reg] Add new user");
-        System.out.println("[del] Delete user");
-        option = sc.nextLine();
-        if (option.equals("reg")) {
-            this.registration();
+        while (!Objects.equals(option, "e")) {
+            System.out.println("As admin you can register and delete users");
+            System.out.println("[reg] Add new user");
+            System.out.println("[del] Delete user");
+            System.out.print(">> ");
+            option = sc.nextLine();
+            if (option.equals("reg")) {
+                this.registration();
+            } else if (option.equals("del")) {
+                System.out.print("Enter User's ID: ");
+                int id = sc.nextInt();
+                this.deleteUser(id);
+            }
         }
-        else if (option.equals("del")) {
-            System.out.print("Enter User's ID: ");
-            int id = sc.nextInt();
-            this.deleteUser(id);
-        }    }
-
+    }
 
 }
