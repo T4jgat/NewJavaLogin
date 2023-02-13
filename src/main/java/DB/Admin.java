@@ -135,7 +135,7 @@ public class Admin implements Person {
         DbFunctions db = new DbFunctions();
         Connection conn = db.connect_to_db("Users", "postgres", "1423");
         // Global variables
-        Boolean isAdmin = true;
+        Boolean isAdmin = false;
         String name, email, password, id_num;
         Scanner scan = new Scanner(System.in);
 
