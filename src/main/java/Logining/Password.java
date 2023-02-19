@@ -51,7 +51,7 @@ public class Password {
         return code;
     }
 
-    public String getCode() {
+    public static String getCode() {
         return codeGenerator();
     }
 
@@ -81,11 +81,12 @@ public class Password {
         String codeFromPrompt;
         SendMail mail = new SendMail(("Confirmation code: " + confirmationCode), email);
 
-        do {
-            System.out.print("Code: ");
-            codeFromPrompt = sc.nextLine();
-        } while (!codeFromPrompt.equals(confirmationCode));
-        return true;
+//        do {
+//            System.out.print("Code: ");
+//            codeFromPrompt = sc.nextLine();
+//        } while (!codeFromPrompt.equals(confirmationCode));
+//        return true;
+        return false;
     }
 
     public static void resetPassword(String password, String email) {

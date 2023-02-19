@@ -23,6 +23,8 @@ public class User implements Person {
     private String email;
     private String password;
 
+    public String getEmail() {return email;}
+
     public String getPassword() {
         return password;
     }
@@ -56,7 +58,7 @@ public class User implements Person {
         Statement statement;
         ResultSet rs = null;
         try {
-            String sql = String.format("select * from users where email = '%s and isadmin = false'", email);
+            String sql = String.format("select * from users where email = '%s' and isadmin = false", email);
             statement = conn.createStatement();
             rs = statement.executeQuery(sql);
             while (rs.next()) {
