@@ -41,7 +41,10 @@ public class setNewPassword extends JFrame {
                 PassMiss.setText("Password mismatch");
                 PassMiss.setVisible(true);
             } else if (Password.PasswordValidation(newPassValue)) {
-                db.update_password(conn, "Users", updatePassUserIns.getPassword(), updatePassUserIns.getEmail(), Password.doHashing(newPassValue));
+                db.update_password(conn, "Users",
+                        updatePassUserIns.getPassword(),
+                        updatePassUserIns.getEmail(),
+                        Password.doHashing(newPassValue));
                 System.exit(0);
             }
         });
@@ -104,15 +107,4 @@ public class setNewPassword extends JFrame {
         return rootPanel;
     }
 
-}
-
-
-class demo {
-    static DbFunctions d = new DbFunctions();
-    static Connection conn = d.connect_to_db("Users", "postgres", "1423");
-    static User user = new User(conn, "tmtmtm1423@gmail.com");
-
-    public static void main(String[] args) {
-        JFrame pa = new setNewPassword(user);
-    }
 }

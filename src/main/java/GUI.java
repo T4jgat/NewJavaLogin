@@ -1,6 +1,9 @@
 import DB.DbFunctions;
 import DB.User;
-import org.zeromq.ZMQ;
+import VkNotification.MyTelegramBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +23,7 @@ class CreateLoginForm extends JFrame {
     JTextField textField1, textField2;
     JButton forgetPass;
     JLabel incorrectDataMessage, attemptCount;
+    String chatId, message;
 
     //calling constructor
     CreateLoginForm(Connection conn) {
@@ -77,7 +81,17 @@ class CreateLoginForm extends JFrame {
                         newPanel.revalidate();
                         newPanel.repaint();
 
-                        // VK TRIGGER HERE
+                        chatId = "YOUR CHAT ID"; // User chatId
+                        message = "Someone logged in!"; // Replace with the actual message to send
+                        MyTelegramBot bot = new MyTelegramBot(chatId, message);
+                        TelegramBotsApi botsApi = null;
+                        try {
+                            botsApi = new TelegramBotsApi(DefaultBotSession.class);
+                            botsApi.registerBot(bot);
+                            bot.sendMessage(); // Send the message immediately after starting the bot
+                        } catch (TelegramApiException ee) {
+                            ee.printStackTrace();
+                        }
 
                     } else {
                         totalAttempts--;

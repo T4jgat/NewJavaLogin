@@ -14,7 +14,7 @@ public class DbFunctions {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbname, user, pass);
             if (conn != null) {
-                System.out.println("======================================");
+                System.out.println("Connection Established");
             } else {
                 System.out.println("Connection Failed");
             }
@@ -25,24 +25,36 @@ public class DbFunctions {
         return conn;
     }
 
-    public void createTable(Connection conn, String table_name) {
-        Statement statement;
-        try {
-            String query = "create table " + table_name + "(empid SERIAL,name varchar(200),address varchar(200),primary key(empid));";
-            statement = conn.createStatement();
-            statement.executeUpdate(query);
-            System.out.println("Table Created");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     public void insert_row(Connection conn, String table_name, String name, String email, String password, int id, boolean isAdmin) {
         Statement statement;
         try {
             String query = String.format("insert into %s(id_num,name,email,password,isAdmin) values('%s','%s','%s','%s', %s);", table_name, id, name, email, password, isAdmin);
             statement = conn.createStatement();
             statement.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void delete_row_by_id(Connection conn, String table_name, int id) {
+        Statement statement;
+        try {
+            String query = String.format("delete from %s where id_num= %s", table_name, id);
+            statement = conn.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Data Deleted");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void update_password(Connection conn, String table_name, String old_pass, String email, String new_pass) {
+        Statement statement;
+        try {
+            String query = String.format("update %s set password='%s' where email = '%s' and password='%s'", table_name, new_pass, email, old_pass);
+            statement = conn.createStatement();
+            statement.executeUpdate(query);
+            System.out.println("Password was Updated!");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -61,18 +73,6 @@ public class DbFunctions {
                 System.out.println(rs.getString("email") + " ");
             }
 
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public void update_password(Connection conn, String table_name, String old_pass, String email, String new_pass) {
-        Statement statement;
-        try {
-            String query = String.format("update %s set password='%s' where email = '%s' and password='%s'", table_name, new_pass, email, old_pass);
-            statement = conn.createStatement();
-            statement.executeUpdate(query);
-            System.out.println("Password was Updated!");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -126,13 +126,13 @@ public class DbFunctions {
         }
     }
 
-    public void delete_row_by_id(Connection conn, String table_name, int id) {
+    public void createTable(Connection conn, String table_name) {
         Statement statement;
         try {
-            String query = String.format("delete from %s where id_num= %s", table_name, id);
+            String query = "create table " + table_name + "(empid SERIAL,name varchar(200),address varchar(200),primary key(empid));";
             statement = conn.createStatement();
             statement.executeUpdate(query);
-            System.out.println("Data Deleted");
+            System.out.println("Table Created");
         } catch (Exception e) {
             System.out.println(e);
         }
