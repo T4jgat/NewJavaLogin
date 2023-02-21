@@ -1,10 +1,8 @@
 # Technical task
 
-## Functions of the different foles
-1. User or admin can register to the system and program can enter their to the DB (PostgreSQL)
-2. User or admin can login to their accounts by their ID or email
-3. Admin can create new users directly in the DB and also delete their
-4. User can delete only his account
+## Functionality
+1. Logging system by email or identity number
+2. Password recovering by confirmation code which will be sent to the mailbox
 
 ## Internal program features
 1. Password is saved in hashed form
